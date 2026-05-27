@@ -52,8 +52,14 @@ export default function Home() {
   };
 
   // 🚪 LOGOUT
-  const onLogout = () => {
-    authClient.signOut();
+  const onLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.reload();
+        },
+      },
+    });
   };
 
   // ⏳ Loading state
