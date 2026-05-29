@@ -85,8 +85,13 @@ export const DashboardUserButton = ({
                     )}
 
                     <div className="flex flex-col gap-0.5 text-left overflow-hidden flex-1 min-w-0">
-                        <p className="text-sm truncate w-full">{userName}</p>
-                        <p className="text-xs truncate w-full text-muted-foreground">{userEmail}</p>
+                        <p className="text-sm truncate w-full">
+                            {userName}
+                        </p>
+
+                        <p className="text-xs truncate w-full text-muted-foreground">
+                            {userEmail}
+                        </p>
                     </div>
 
                     <ChevronDownIcon className="size-4 shrink-0" />
@@ -95,10 +100,29 @@ export const DashboardUserButton = ({
                 <DrawerContent>
                     <DrawerHeader>
                         <DrawerTitle>{userName}</DrawerTitle>
-                        <DrawerDescription>{userEmail}</DrawerDescription>
+                        <DrawerDescription>
+                            {userEmail}
+                        </DrawerDescription>
                     </DrawerHeader>
+
                     <DrawerFooter>
-                        <Button variant="outline" onClick={onLogout}>
+
+                        {/* BILLING BUTTON - Uncomment later when billing system is ready */}
+                        
+                        {/*
+                        <Button
+                            variant="outline"
+                            onClick={() => authClient.customer.portal()}
+                        >
+                            <CreditCardIcon className="size-4 text-black" />
+                            Billing
+                        </Button>
+                        */}
+
+                        <Button
+                            variant="outline"
+                            onClick={onLogout}
+                        >
                             <LogOutIcon className="size-4" />
                             Logout
                         </Button>
@@ -125,22 +149,48 @@ export const DashboardUserButton = ({
                 )}
 
                 <div className="flex flex-col gap-0.5 text-left overflow-hidden flex-1 min-w-0">
-                    <p className="text-sm truncate w-full">{userName}</p>
-                    <p className="text-xs truncate w-full text-muted-foreground">{userEmail}</p>
+                    <p className="text-sm truncate w-full">
+                        {userName}
+                    </p>
+
+                    <p className="text-xs truncate w-full text-muted-foreground">
+                        {userEmail}
+                    </p>
                 </div>
 
                 <ChevronDownIcon className="size-4 shrink-0" />
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" side="right" className="w-72">
+            <DropdownMenuContent
+                align="end"
+                side="right"
+                className="w-72"
+            >
                 <DropdownMenuLabel>
                     <div className="flex flex-col gap-1">
-                        <span className="font-medium truncate">{userName}</span>
-                        <span className="text-sm font-normal text-muted-foreground truncate">{userEmail}</span>
+                        <span className="font-medium truncate">
+                            {userName}
+                        </span>
+
+                        <span className="text-sm font-normal text-muted-foreground truncate">
+                            {userEmail}
+                        </span>
                     </div>
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
+
+                {/* BILLING MENU - Uncomment later when billing system is ready */}
+
+                {/*
+                <DropdownMenuItem
+                    onClick={() => authClient.customer.portal()}
+                    className="cursor-pointer flex items-center justify-between"
+                >
+                    Billing
+                    <CreditCardIcon className="size-4" />
+                </DropdownMenuItem>
+                */}
 
                 <DropdownMenuItem
                     onClick={onLogout}
