@@ -4,10 +4,10 @@
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 
-// import { GeneratedAvatar } from "@/components/generated-avatar"; // uncomment when dicebear is fixed
+ //import { GeneratedAvatar } from "@/components/generated-avatar"; // uncomment when dicebear is fixed
 
 import {
-    Command,
+    CommandDialog,
     CommandEmpty,
     CommandGroup,
     CommandInput,
@@ -26,7 +26,6 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
     const [search, setSearch] = useState("");
 
     void router; // temporary — used when tRPC routes are set up
-    void setOpen; // temporary — used when CommandResponsiveDialog is set up
 
     // const trpc = useTRPC();
 
@@ -45,7 +44,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
     // );
 
     return (
-        <Command>
+        <CommandDialog open={open} onOpenChange={setOpen}>
             <CommandInput
                 placeholder="Find a meeting or agent..."
                 value={search}
@@ -96,6 +95,6 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                     ))} */}
                 </CommandGroup>
             </CommandList>
-        </Command>
+        </CommandDialog>
     );
 };

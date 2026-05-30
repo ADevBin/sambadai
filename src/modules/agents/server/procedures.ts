@@ -8,29 +8,13 @@ import {
   MAX_PAGE_SIZE,
   MIN_PAGE_SIZE,
 } from "@/constants";
+
 import { db } from "@/db";
 import { agents, meetings } from "@/db/schema";
-import {
-  createTRPCRouter,
-  // premiumProcedure, // uncomment when premium module is set up
-  protectedProcedure,
-} from "@/trpc/init";
 
-// import { agentsInsertSchema, agentsUpdateSchema } from "../schemas"; // uncomment when schemas are created
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
-// Temporary inline schemas until ../schemas is created
-import { z as zod } from "zod";
-
-const agentsInsertSchema = zod.object({
-  name: zod.string().min(1),
-  instructions: zod.string().min(1),
-});
-
-const agentsUpdateSchema = zod.object({
-  id: zod.string().min(1),
-  name: zod.string().min(1).optional(),
-  instructions: zod.string().min(1).optional(),
-});
+import { agentsInsertSchema, agentsUpdateSchema } from "../schemas";
 
 export const agentsRouter = createTRPCRouter({
   update: protectedProcedure
@@ -38,7 +22,9 @@ export const agentsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const [updatedAgent] = await db
         .update(agents)
-        .set(input)
+        .set({
+          ...input,
+        })
         .where(
           and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id)),
         )
@@ -84,7 +70,7 @@ export const agentsRouter = createTRPCRouter({
         id: z.string(),
       }),
     )
-    .query(async ({ input, ctx }) => {
+    .query(async ({ ctx, input }) => {
       const [existingAgent] = await db
         .select({
           ...getTableColumns(agents),
@@ -157,24 +143,26 @@ export const agentsRouter = createTRPCRouter({
       };
     }),
 
-  // create: premiumProcedure("agents") — uncomment when premium module is set up
-  // .input(agentsInsertSchema)
-  // .mutation(async ({ input, ctx }) => {
-  //   const [createdAgent] = await db
-  //     .insert(agents)
-  //     .values({
-  //       ...input,
-  //       userId: ctx.auth.user.id,
-  //     })
-  //     .returning();
-  //
-  //   return createdAgent;
-  // }),
+  // Uncomment later when premiumProcedure is ready
+  /*
+  create: premiumProcedure("agents")
+    .input(agentsInsertSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [createdAgent] = await db
+        .insert(agents)
+        .values({
+          ...input,
+          userId: ctx.auth.user.id,
+        })
+        .returning();
 
-  // Temporary create without premium check — remove when premiumProcedure is set up
+      return createdAgent;
+    }),
+  */
+
   create: protectedProcedure
     .input(agentsInsertSchema)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ ctx, input }) => {
       const [createdAgent] = await db
         .insert(agents)
         .values({
