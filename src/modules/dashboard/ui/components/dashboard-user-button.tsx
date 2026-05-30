@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
+import { CreditCardIcon } from "lucide-react";
 
 import {
     Drawer,
@@ -109,15 +110,15 @@ export const DashboardUserButton = ({
 
                         {/* BILLING BUTTON - Uncomment later when billing system is ready */}
                         
-                        {/*
+                        {
                         <Button
                             variant="outline"
-                            onClick={() => authClient.customer.portal()}
+                            //onClick={() => authClient.customer.portal()}
                         >
                             <CreditCardIcon className="size-4 text-black" />
                             Billing
                         </Button>
-                        */}
+                        }
 
                         <Button
                             variant="outline"
@@ -182,15 +183,15 @@ export const DashboardUserButton = ({
 
                 {/* BILLING MENU - Uncomment later when billing system is ready */}
 
-                {/*
+                {
                 <DropdownMenuItem
-                    onClick={() => authClient.customer.portal()}
+                    //onClick={() => authClient.customer.portal()}
                     className="cursor-pointer flex items-center justify-between"
                 >
                     Billing
                     <CreditCardIcon className="size-4" />
                 </DropdownMenuItem>
-                */}
+                }
 
                 <DropdownMenuItem
                     onClick={onLogout}
