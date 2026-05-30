@@ -1,13 +1,12 @@
 "use client";
 
-// import { useSuspenseQuery } from "@tanstack/react-query"; // uncomment when tRPC agents router is wired
+// import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 // import { DataTable } from "@/components/data-table"; // uncomment when component is created
 // import { EmptyState } from "@/components/empty-state"; // uncomment when component is created
-// import { ErrorState } from "@/components/error-state"; // uncomment when component is created
 import { LoadingState } from "@/components/loading-state";
-// import { useTRPC } from "@/trpc/client"; // uncomment when agents router is wired
+//import { useTRPC } from "@/trpc/client"; // uncomment when agents router is wired
 
 // import { useAgentsFilters } from "../../hooks/use-agents-filters"; // uncomment when hook is created
 // import { columns } from "../components/columns"; // uncomment when columns is created
@@ -20,11 +19,11 @@ export const AgentsView = () => {
     // const [filters, setFilters] = useAgentsFilters(); // uncomment when hook is created
     // const trpc = useTRPC(); // uncomment when agents router is wired
 
-    // const { data } = useSuspenseQuery(
-    //     trpc.agents.getMany.queryOptions({
-    //         ...filters,
-    //     })
-    // ); // uncomment when agents router is wired
+     // const { data } = useSuspenseQuery(
+         // trpc.agents.getMany.queryOptions({
+             // ...filters,
+         // })
+     // ); // uncomment when agents router is wired
 
     // Temporary placeholder until data is wired
     return (
@@ -82,9 +81,6 @@ export const AgentsViewError = () => {
         </div>
 
         // Uncomment when ErrorState component is created
-        // <ErrorState
-        //     title="Error Loading Agents"
-        //     description="Something went wrong"
-        // />
+        // <ErrorState title="Error Loading Agents" description="Something went wrong" />
     );
 };
