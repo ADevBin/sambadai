@@ -1,28 +1,25 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-// import type { SearchParams } from "nuqs"; // uncomment when nuqs is installed
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { auth } from "@/lib/auth";
-import { getQueryClient } from "@/trpc/server";
+import { getQueryClient, trpc } from "@/trpc/server";
 
-// import { loadSearchParams } from "@/modules/agents/params"; // uncomment when params is created
-// import { AgentsListHeader } from "@/modules/agents/ui/components/agents-list-header"; // uncomment when component is created
+import { AgentsListHeader } from "@/modules/agents/ui/components/agents-list-header";
 import {
     AgentsView,
     AgentsViewError,
     AgentsViewLoading,
 } from "@/modules/agents/ui/views/agents-view";
 
-// interface Props {
-//     searchParams: Promise<SearchParams>; // uncomment when nuqs is installed
-// };
+// Uncomment when nuqs + params are ready:
+// import type { SearchParams } from "nuqs";
+// import { loadSearchParams } from "@/modules/agents/params";
+// interface Props { searchParams: Promise<SearchParams> };
 
 const Page = async () => {
-    // const filters = await loadSearchParams(searchParams); // uncomment when params is created
-
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -33,13 +30,19 @@ const Page = async () => {
 
     const queryClient = getQueryClient();
 
-    // void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions({
-    //     ...filters, // uncomment when agents router is wired to trpc and params is created
-    // }));
+    // Uncomment when params is created:
+    // const filters = await loadSearchParams(searchParams);
+
+    void queryClient.prefetchQuery(
+        trpc.agents.getMany.queryOptions({
+            page: 1,
+            pageSize: 10,
+        })
+    );
 
     return (
         <>
-            {/* <AgentsListHeader /> */}{/* uncomment when component is created */}
+            <AgentsListHeader />
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <Suspense fallback={<AgentsViewLoading />}>
                     <ErrorBoundary fallback={<AgentsViewError />}>
