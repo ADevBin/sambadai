@@ -33,7 +33,7 @@ const Page = async () => {
     // Uncomment when params is created:
     // const filters = await loadSearchParams(searchParams);
 
-    void queryClient.prefetchQuery(
+    await queryClient.prefetchQuery(
         trpc.agents.getMany.queryOptions({
             page: 1,
             pageSize: 10,
