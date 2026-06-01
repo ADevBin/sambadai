@@ -19,7 +19,7 @@ import { UpdateMeetingDialog } from "../components/update-meeting-dialog";
 
 interface Props {
     meetingId: string;
-};
+}
 
 export const MeetingIdView = ({ meetingId }: Props) => {
     const trpc = useTRPC();
@@ -40,10 +40,12 @@ export const MeetingIdView = ({ meetingId }: Props) => {
     const removeMeeting = useMutation(
         trpc.meetings.remove.mutationOptions({
             onSuccess: async () => {
-                await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
                 await queryClient.invalidateQueries(
-                    //trpc.premium.getFreeUsage.queryOptions(),
+                    trpc.meetings.getMany.queryOptions({}),
                 );
+                // await queryClient.invalidateQueries(
+                //     trpc.premium.getFreeUsage.queryOptions(),
+                // ); // uncomment when premium module is set up
                 router.push("/meetings");
             },
         }),
@@ -51,9 +53,7 @@ export const MeetingIdView = ({ meetingId }: Props) => {
 
     const handleRemoveMeeting = async () => {
         const ok = await confirmRemove();
-
         if (!ok) return;
-
         await removeMeeting.mutateAsync({ id: meetingId });
     };
 
@@ -83,9 +83,7 @@ export const MeetingIdView = ({ meetingId }: Props) => {
                 {isCompleted && <CompletedState data={data} />}
                 {isActive && <ActiveState meetingId={meetingId} />}
                 {isUpcoming && (
-                    <UpcomingState
-                        meetingId={meetingId}
-                    />
+                    <UpcomingState meetingId={meetingId} />
                 )}
             </div>
         </>
