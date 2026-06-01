@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,17 +24,10 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { meetingsInsertSchema } from "../../schemas";
-// import { MeetingGetOne } from "../../types"; // uncomment when meetings router is registered in _app.ts
+import { MeetingGetOne } from "../../types";
 
 import { NewAgentDialog } from "@/modules/agents/ui/components/new-agent-dialog";
 import { useRouter } from "next/navigation";
-
-// Temporary type until meetings router is registered
-type MeetingGetOne = {
-  id: string;
-  name: string;
-  agentId: string;
-};
 
 interface MeetingFormProps {
   onSuccess?: (id?: string) => void;
@@ -61,46 +54,44 @@ export const MeetingForm = ({
     }),
   );
 
-  // Uncomment when meetings router is registered in _app.ts:
-  // const createMeeting = useMutation(
-  //   trpc.meetings.create.mutationOptions({
-  //     onSuccess: async (data: { id: string }) => {
-  //       await queryClient.invalidateQueries(
-  //         trpc.meetings.getMany.queryOptions({}),
-  //       );
-  //       // await queryClient.invalidateQueries(
-  //       //   trpc.premium.getFreeUsage.queryOptions(),
-  //       // );
-  //       onSuccess?.(data.id);
-  //     },
-  //     onError: (error: { message: string; data?: { code?: string } }) => {
-  //       toast.error(error.message);
-  //       if (error.data?.code === "FORBIDDEN") {
-  //         router.push("/upgrade");
-  //       }
-  //     },
-  //   }),
-  // );
+  const createMeeting = useMutation(
+    trpc.meetings.create.mutationOptions({
+      onSuccess: async (data) => {
+        await queryClient.invalidateQueries(
+          trpc.meetings.getMany.queryOptions({}),
+        );
+        // await queryClient.invalidateQueries(
+        //   trpc.premium.getFreeUsage.queryOptions(),
+        // ); // uncomment when premium module is set up
+        onSuccess?.(data.id);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+        if (error.data?.code === "FORBIDDEN") {
+          router.push("/upgrade");
+        }
+      },
+    }),
+  );
 
-  // Uncomment when meetings router is registered in _app.ts:
-  // const updateMeeting = useMutation(
-  //   trpc.meetings.update.mutationOptions({
-  //     onSuccess: async () => {
-  //       await queryClient.invalidateQueries(
-  //         trpc.meetings.getMany.queryOptions({}),
-  //       );
-  //       if (initialValues?.id) {
-  //         await queryClient.invalidateQueries(
-  //           trpc.meetings.getOne.queryOptions({ id: initialValues.id }),
-  //         );
-  //       }
-  //       onSuccess?.();
-  //     },
-  //     onError: (error: { message: string }) => {
-  //       toast.error(error.message);
-  //     },
-  //   }),
-  // );
+  const updateMeeting = useMutation(
+    trpc.meetings.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.meetings.getMany.queryOptions({}),
+        );
+        if (initialValues?.id) {
+          await queryClient.invalidateQueries(
+            trpc.meetings.getOne.queryOptions({ id: initialValues.id }),
+          );
+        }
+        onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }),
+  );
 
   const form = useForm<z.infer<typeof meetingsInsertSchema>>({
     resolver: zodResolver(meetingsInsertSchema),
@@ -111,21 +102,13 @@ export const MeetingForm = ({
   });
 
   const isEdit = !!initialValues?.id;
-  // const isPending = createMeeting.isPending || updateMeeting.isPending;
-  const isPending = false; // temporary until mutations are set up
+  const isPending = createMeeting.isPending || updateMeeting.isPending;
 
   const onSubmit = (values: z.infer<typeof meetingsInsertSchema>) => {
-    void queryClient;
-    void router;
-
     if (isEdit) {
-      // updateMeeting.mutate({ ...values, id: initialValues.id });
-      toast.info("Update meeting coming soon...");
-      void values;
+      updateMeeting.mutate({ ...values, id: initialValues.id });
     } else {
-      // createMeeting.mutate(values);
-      toast.info("Create meeting coming soon...");
-      void values;
+      createMeeting.mutate(values);
     }
   };
 
