@@ -6,24 +6,14 @@ import { auth } from "@/lib/auth";
 // } from "@/modules/premium/constants"; // uncomment when premium module is set up
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
+import { cache } from "react";
 
-// export const createTRPCContext = cache(async () => {
-//   const session = await auth.api.getSession({
-//     headers: await headers(),
-//   });
-
-//   return { session };
-// });
-export const createTRPCContext = async () => {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    return { session };
-  } catch {
-    return { session: null };
-  }
-};
+export const createTRPCContext = cache(async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  return { session };
+});
 
 type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
 
@@ -31,7 +21,6 @@ const t = initTRPC.context<TRPCContext>().create({
   // transformer: superjson,
 });
 
-// Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
@@ -40,7 +29,6 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   if (!ctx.session) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
   }
-
   return next({ ctx: { ...ctx, auth: ctx.session } });
 });
 
@@ -52,16 +40,12 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
 //     });
 //
 //     const [userMeetings] = await db
-//       .select({
-//         count: count(meetings.id),
-//       })
+//       .select({ count: count(meetings.id) })
 //       .from(meetings)
 //       .where(eq(meetings.userId, ctx.auth.user.id));
 //
 //     const [userAgents] = await db
-//       .select({
-//         count: count(agents.id),
-//       })
+//       .select({ count: count(agents.id) })
 //       .from(agents)
 //       .where(eq(agents.userId, ctx.auth.user.id));
 //
