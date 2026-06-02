@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "auth:generate": "npx @better-auth/cli@1.2.8 generate --config ./src/lib/auth.ts",
     "start": "next start",
