@@ -1,14 +1,12 @@
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   serverExternalPackages: ["@dicebear/core", "@dicebear/collection"],
-// };
-
-// export default nextConfig;
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@dicebear/core", "@dicebear/collection"],
+  serverExternalPackages: [
+    "@dicebear/core",
+    "@dicebear/collection",
+    "@mediapipe/tasks-vision",
+    "@stream-io/video-react-sdk",
+  ],
   images: {
     remotePatterns: [
       {
@@ -29,6 +27,13 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+  },
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        "@mediapipe/tasks-vision": "@mediapipe/tasks-vision",
+      },
+    },
   },
 };
 
