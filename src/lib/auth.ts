@@ -4,7 +4,12 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
+  baseURL: process.env.BETTER_AUTH_URL,
+  trustedOrigins: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://salad-gem-duke.ngrok-free.dev", // 👈 add this
+  ],
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,
