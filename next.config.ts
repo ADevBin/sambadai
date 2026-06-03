@@ -1,12 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: [
+  "salad-gem-duke.ngrok-free.dev",
+  "192.168.1.75",
+  ],
+
   serverExternalPackages: [
     "@dicebear/core",
     "@dicebear/collection",
     "@mediapipe/tasks-vision",
     "@stream-io/video-react-sdk",
   ],
+
   images: {
     remotePatterns: [
       {
@@ -15,6 +21,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   async headers() {
     return [
       {
@@ -27,13 +34,6 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
-  },
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        "@mediapipe/tasks-vision": "@mediapipe/tasks-vision",
-      },
-    },
   },
 };
 
