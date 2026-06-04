@@ -80,7 +80,6 @@ export const DashboardUserButton = ({
                     ) : (
                         <GeneratedAvatar
                             seed={userName}
-                            src=""
                             className="size-9 mr-3"
                         />
                     )}
@@ -107,18 +106,12 @@ export const DashboardUserButton = ({
                     </DrawerHeader>
 
                     <DrawerFooter>
-
-                        {/* BILLING BUTTON - Uncomment later when billing system is ready */}
-                        
-                        {
                         <Button
                             variant="outline"
-                            //onClick={() => authClient.customer.portal()}
                         >
                             <CreditCardIcon className="size-4 text-black" />
                             Billing
                         </Button>
-                        }
 
                         <Button
                             variant="outline"
@@ -144,7 +137,6 @@ export const DashboardUserButton = ({
                 ) : (
                     <GeneratedAvatar
                         seed={userName}
-                        src=""
                         className="size-9 mr-3"
                     />
                 )}
@@ -181,17 +173,12 @@ export const DashboardUserButton = ({
 
                 <DropdownMenuSeparator />
 
-                {/* BILLING MENU - Uncomment later when billing system is ready */}
-
-                {
                 <DropdownMenuItem
-                    //onClick={() => authClient.customer.portal()}
                     className="cursor-pointer flex items-center justify-between"
                 >
                     Billing
                     <CreditCardIcon className="size-4" />
                 </DropdownMenuItem>
-                }
 
                 <DropdownMenuItem
                     onClick={onLogout}

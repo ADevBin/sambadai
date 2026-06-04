@@ -1,50 +1,43 @@
-"use client";
-
-// import { useQuery } from "@tanstack/react-query"; // install when tRPC is set up
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 
- //import { GeneratedAvatar } from "@/components/generated-avatar"; // uncomment when dicebear is fixed
-
+import { GeneratedAvatar } from "@/components/generated-avatar";
 import {
-    CommandDialog,
     CommandEmpty,
     CommandGroup,
     CommandInput,
-    CommandList
+    CommandItem,
+    CommandList,
+    CommandResponsiveDialog
 } from "@/components/ui/command";
-
-// import { useTRPC } from "@/trpc/client"; // uncomment when tRPC is set up
+import { useTRPC } from "@/trpc/client";
 
 interface Props {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 export const DashboardCommand = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const [search, setSearch] = useState("");
 
-    void router; // temporary — used when tRPC routes are set up
-
-    // const trpc = useTRPC();
-
-    // const meetings = useQuery(
-    //     trpc.meetings.getMany.queryOptions({
-    //         search,
-    //         pageSize: 100,
-    //     })
-    // );
-
-    // const agents = useQuery(
-    //     trpc.agents.getMany.queryOptions({
-    //         search,
-    //         pageSize: 100,
-    //     })
-    // );
+    const trpc = useTRPC();
+    const meetings = useQuery(
+        trpc.meetings.getMany.queryOptions({
+            search,
+            pageSize: 100,
+        })
+    );
+    const agents = useQuery(
+        trpc.agents.getMany.queryOptions({
+            search,
+            pageSize: 100,
+        })
+    );
 
     return (
-        <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandResponsiveDialog shouldFilter={false} open={open} onOpenChange={setOpen}>
             <CommandInput
                 placeholder="Find a meeting or agent..."
                 value={search}
@@ -57,8 +50,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                             No meetings found
                         </span>
                     </CommandEmpty>
-                    {/* Meetings list — uncomment when tRPC is set up */}
-                    {/* {meetings.data?.items.map((meeting) => (
+                    {meetings.data?.items.map((meeting) => (
                         <CommandItem
                             onSelect={() => {
                                 router.push(`/meetings/${meeting.id}`);
@@ -68,7 +60,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                         >
                             {meeting.name}
                         </CommandItem>
-                    ))} */}
+                    ))}
                 </CommandGroup>
                 <CommandGroup heading="Agents">
                     <CommandEmpty>
@@ -76,8 +68,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                             No agents found
                         </span>
                     </CommandEmpty>
-                    {/* Agents list — uncomment when tRPC is set up */}
-                    {/* {agents.data?.items.map((agent) => (
+                    {agents.data?.items.map((agent) => (
                         <CommandItem
                             onSelect={() => {
                                 router.push(`/agents/${agent.id}`);
@@ -92,9 +83,9 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                             />
                             {agent.name}
                         </CommandItem>
-                    ))} */}
+                    ))}
                 </CommandGroup>
             </CommandList>
-        </CommandDialog>
+        </CommandResponsiveDialog>
     );
 };
