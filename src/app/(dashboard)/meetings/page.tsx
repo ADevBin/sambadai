@@ -52,4 +52,4 @@ const Page = async ({ searchParams }: Props) => {
     );
 };
 
-export default Page;//Default Page export
+export default Page;

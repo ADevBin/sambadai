@@ -43,9 +43,6 @@ export const MeetingIdView = ({ meetingId }: Props) => {
                 await queryClient.invalidateQueries(
                     trpc.meetings.getMany.queryOptions({}),
                 );
-                // await queryClient.invalidateQueries(
-                //     trpc.premium.getFreeUsage.queryOptions(),
-                // ); // uncomment when premium module is set up
                 router.push("/meetings");
             },
         }),
@@ -100,10 +97,20 @@ export const MeetingIdViewLoading = () => {
 };
 
 export const MeetingIdViewError = () => {
+    const router = useRouter();
+
     return (
-        <ErrorState
-            title="Error Loading Meeting"
-            description="Please try again later"
-        />
+        <div className="flex flex-col items-center justify-center h-full">
+            <ErrorState
+                title="Meeting Not Found"
+                description="This meeting may have been deleted or does not exist."
+            />
+            <button
+                onClick={() => router.push("/meetings")}
+                className="mt-4 text-sm text-blue-500 underline hover:text-blue-600 transition-colors"
+            >
+                Back to Meetings
+            </button>
+        </div>
     );
 };
